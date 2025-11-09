@@ -14,14 +14,23 @@ def read_file(file_path):
     except FileNotFoundError:
         return f"Error: File not found in the given path {file_path}"
     
-def explain_code(code):
+# explainer 
+#security reviewer - detects vulnerabilities 
+# code improver - suggests fixes / optimize 
+
+def explain_code(code, role="explainer"):
     try:
-        prompt = f"You are a senior software engineer. Analyze and explain the following code. Code: {code}"
+        role_prompts = {
+            "explainer":"You are a senior software engineer. Explain in simple words what this code does and why it's written that way",
+            "security":"You are a DevSecOps expert. Find and explain any potential security vulnerabilities or bad practices in this code",
+            "improver":"You are a software reviewer. Suggest specific improvements to optimize or refactor this code for performance and readability."
+        }
+        system_prompt = role_prompts.get(role, role_prompts["explainer"])
         response = client.chat.completions.create(
             model="llama2:7b",
             messages=[
-                {"role":"system", "content":"You are a helpful code analysis assistant."},
-                {"role":"user", "content": prompt}
+                {"role":"system", "content":system_prompt},
+                {"role":"user", "content": code}
             ]
         )
         return response.choices[0].message.content.strip()
@@ -29,10 +38,16 @@ def explain_code(code):
         return f"Error: {e}"
 
 def main():
+    print("-------Code review AI agent------")
     file_path = input("Enter the path of the code file to analyze: ")
     code = read_file(file_path)
-    print("Analyzing code....")
-    res = explain_code(code)
+    print("\n choose analysis type: ")
+    print("1. explain code \n 2. security review\n 3. suggest improvements")
+    choice = input("\n Enter your choice (1/2/3): ")
+    roles = {1:"explainer", 2:"security", 3:"improver"}
+    role = roles.get(choice, "explainer")
+    print(f"\n running as {role.upper()}...")
+    res = explain_code(code, role=role)
     print("Explaination....")
     print(res)
     

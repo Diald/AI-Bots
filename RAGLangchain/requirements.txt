@@ -1,0 +1,6 @@
+langchain>=0.0.300
+chromadb
+pypdf
+sentence-transformers
+faiss-cpu
+python-dotenv

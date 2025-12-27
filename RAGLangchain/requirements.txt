@@ -1,4 +1,6 @@
-langchain>=0.0.300
+langchain>=0.1.0
+langchain-community
+langchain-groq
 chromadb
 pypdf
 sentence-transformers

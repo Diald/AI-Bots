@@ -6,10 +6,9 @@ from google import genai
 
 load_dotenv()
 
-# ---- Gemini Setup ----
+
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Use a valid, available model
 MODEL = "models/gemini-2.5-flash"
 
 MCP_URL = "http://localhost:3333"
